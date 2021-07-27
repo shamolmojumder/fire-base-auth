@@ -53,7 +53,13 @@ function App() {
     });
     
   }
+  const handleChange=(e)=>{
+    console.log(e.target.name,e.target.value);
+  }
 
+  const handleSubmit= ()=>{
+    console.log("handlesubmit");
+  }
   return (
     <div className="App">
       <h1>This is from App.js</h1>
@@ -73,11 +79,13 @@ function App() {
       </div>
     }
     <h1>Our Own Authentication</h1>
-    <input type="text" name="" id="" placeholder="email" />
+    <form onSubmit={handleSubmit}>
+    <input type="text" name="email" id="" onBlur={handleChange} placeholder="email" required/>
     <br />
-    <input type="password" name="" id="" placeholder="password" />
+    <input type="password" name="password" id="" onBlur={handleChange} placeholder="password" />
     <br />
-    <button>Sign In</button>
+    <input type="submit" value="Submit" />
+    </form>
     </div>
   );
 }
