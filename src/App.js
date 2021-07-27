@@ -9,8 +9,8 @@ function App() {
     isSignIn:false,
     name:'',
     email:'',
+    password:'',
     photo:'',
-
   })
 
   if (firebase.apps.length===0) {
@@ -54,10 +54,11 @@ function App() {
     
   }
   const handleChange=(e)=>{
-    console.log(e.target.name,e.target.value);
+    debugger;
+    let isFormValid =true;
+    // console.log(e.target.name,e.target.value);
     if (e.target.name === "email") {
-      const isEmailValid =/\S+@\S+\.\S+/.test(e.target.value);
-      console.log(isEmailValid);
+      isFormValid =/\S+@\S+\.\S+/.test(e.target.value);
     }
     if (e.target.name === "password") {
       // Without it, your current regex only matches that you have 6 to 16 valid characters, it doesn't validate that it has at least a number, and at least a special character. That's what the lookahead above is for
@@ -66,8 +67,11 @@ function App() {
       // -ignore
       const isPasswordValid =e.target.value.length>6;
       const passwordHasNumber= /\d{1}/.test(e.target.value)
-      console.log(isPasswordValid && passwordHasNumber);
-      
+        isFormValid=isPasswordValid && passwordHasNumber;
+    }if(isFormValid){
+      const newUserInfo={...user};
+      newUserInfo[e.target.name]=e.target.value;
+      setUser(newUserInfo)
     }
   }
 
@@ -93,12 +97,17 @@ function App() {
       </div>
     }
     <h1>Our Own Authentication</h1>
+    <p>Name {user.name}  </p>
+    <p>Your email {user.email}  </p>
+    <p>Your  password {user.password}  </p>
     <form onSubmit={handleSubmit}>
-    <input type="text" name="email" id="" onBlur={handleChange} placeholder="email" required/>
-    <br />
-    <input type="password" name="password" id="" onBlur={handleChange} placeholder="password" />
-    <br />
-    <input type="submit" value="Submit" />
+      <input type="text" name="name" id="" onBlur={handleChange} placeholder="Your name" required/>
+      <br />
+      <input type="text" name="email" id="" onBlur={handleChange} placeholder="email" required/>
+      <br />
+      <input type="password" name="password" id="" onBlur={handleChange} placeholder="password" required/>
+      <br />
+      <input type="submit" value="Submit" />
     </form>
     </div>
   );
