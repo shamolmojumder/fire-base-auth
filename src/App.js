@@ -60,9 +60,14 @@ function App() {
       console.log(isEmailValid);
     }
     if (e.target.name === "password") {
+      // Without it, your current regex only matches that you have 6 to 16 valid characters, it doesn't validate that it has at least a number, and at least a special character. That's what the lookahead above is for
+      // const isPasswordValid =/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(e.target.value)
+      // console.log(isPasswordValid);
+      // -ignore
       const isPasswordValid =e.target.value.length>6;
       const passwordHasNumber= /\d{1}/.test(e.target.value)
       console.log(isPasswordValid && passwordHasNumber);
+      
     }
   }
 
