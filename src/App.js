@@ -54,11 +54,11 @@ function App() {
     
   }
   const handleChange=(e)=>{
-    debugger;
-    let isFormValid =true;
+    //debugger;
+    let isFieldValid =true;
     // console.log(e.target.name,e.target.value);
     if (e.target.name === "email") {
-      isFormValid =/\S+@\S+\.\S+/.test(e.target.value);
+      isFieldValid =/\S+@\S+\.\S+/.test(e.target.value);
     }
     if (e.target.name === "password") {
       // Without it, your current regex only matches that you have 6 to 16 valid characters, it doesn't validate that it has at least a number, and at least a special character. That's what the lookahead above is for
@@ -67,16 +67,21 @@ function App() {
       // -ignore
       const isPasswordValid =e.target.value.length>6;
       const passwordHasNumber= /\d{1}/.test(e.target.value)
-        isFormValid=isPasswordValid && passwordHasNumber;
-    }if(isFormValid){
+        isFieldValid=isPasswordValid && passwordHasNumber;
+    }if(isFieldValid){
       const newUserInfo={...user};
       newUserInfo[e.target.name]=e.target.value;
       setUser(newUserInfo)
     }
   }
 
-  const handleSubmit= ()=>{
-    console.log("handlesubmit");
+  const handleSubmit= (e)=>{
+    console.log(user);
+    if (user.email && user.password) {
+      console.log(user);
+    }
+    e.preventDefault();
+    
   }
   return (
     <div className="App">
@@ -97,11 +102,9 @@ function App() {
       </div>
     }
     <h1>Our Own Authentication</h1>
-    <p>Name {user.name}  </p>
-    <p>Your email {user.email}  </p>
-    <p>Your  password {user.password}  </p>
+    {/* <p> {user.email}{user.password} </p> */}
     <form onSubmit={handleSubmit}>
-      <input type="text" name="name" id="" onBlur={handleChange} placeholder="Your name" required/>
+      <input type="text" name="name" id="" onBlur={handleChange} placeholder="Your name" />
       <br />
       <input type="text" name="email" id="" onBlur={handleChange} placeholder="email" required/>
       <br />
