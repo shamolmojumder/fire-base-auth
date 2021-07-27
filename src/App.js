@@ -16,9 +16,8 @@ function App() {
   if (firebase.apps.length===0) {
       firebase.initializeApp(firebaseConfig); 
   }
-
-  const googleSignIn=()=>{
-    var provider = new firebase.auth.GoogleAuthProvider();
+  var provider = new firebase.auth.GoogleAuthProvider();
+  const handleGoogle=()=>{
     firebase.auth()
     .signInWithPopup(provider)
     .then((result) => {
@@ -29,7 +28,7 @@ function App() {
         name:displayName,
         email:email,
         photo:photoURL,
-      }
+      }  
       setUser(signInUser)
       console.log("sign in ",user.displayName);
       // ...
@@ -61,7 +60,7 @@ function App() {
    
 
      {
-       user.isSignIn ?<button onClick={googleSignOut}> Sign out </button>:<button onClick={googleSignIn}> Sign in </button>
+       user.isSignIn ?<button onClick={googleSignOut}> Sign out </button>:<button onClick={handleGoogle}> Sign in </button>
        //user.isSignIn initial value is false
       // ternary operation is like condtion? true:false
       // so is isSignIn condtion is false that's mean there is no user.Sign in will show 
@@ -73,6 +72,12 @@ function App() {
         <img src={user.photo} alt="" />
       </div>
     }
+    <h1>Our Own Authentication</h1>
+    <input type="text" name="" id="" placeholder="email" />
+    <br />
+    <input type="password" name="" id="" placeholder="password" />
+    <br />
+    <button>Sign In</button>
     </div>
   );
 }
