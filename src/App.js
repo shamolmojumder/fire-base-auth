@@ -11,6 +11,8 @@ function App() {
     email:'',
     password:'',
     photo:'',
+    // error:'',
+    // success:false
   })
 
   if (firebase.apps.length===0) {
@@ -44,6 +46,8 @@ function App() {
         name:'',
         email:'',
         photo:'',
+        error:'',
+        success:false
       }
       setUser(signOutUser)
       console.clear()
@@ -76,9 +80,29 @@ function App() {
   }
 
   const handleSubmit= (e)=>{
-    console.log(user);
+    console.log(user.email , user.password);
     if (user.email && user.password) {
-      console.log(user);
+      firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+      .then((res) => {
+        const newUserInfo={...user};
+        newUserInfo.error='';
+        newUserInfo.success=true
+        setUser(newUserInfo)
+        // Signed in 
+        console.log(res);
+        // var user = res.user;
+        // ...
+      })
+      .catch((error) => {
+        const newUserInfo={...user};
+        newUserInfo.error=error.message;
+        newUserInfo.success=false
+        setUser(newUserInfo);
+        // var errorCode = error.code;
+        // var errorMessage = error.message;
+        // console.log(errorCode,errorMessage);
+        // ..
+      });
     }
     e.preventDefault();
     
@@ -112,6 +136,10 @@ function App() {
       <br />
       <input type="submit" value="Submit" />
     </form>
+    <p style={{color:'red'}}> {user.error} </p>
+    {
+      user.success && <p style={{color:'green'}}> User created successfully </p>
+    }
     </div>
   );
 }
