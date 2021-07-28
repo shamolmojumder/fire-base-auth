@@ -5,7 +5,7 @@ import firebaseConfig from './firebase.config';
 import { useState } from 'react';
 
 function App() {
-  const [newUser,setNewUser]=useState(false)
+  const [newUser,setNewUser]=useState(false);
   const [user,setUser]= useState({
     isSignIn:false,
     newUser:false,
@@ -15,7 +15,7 @@ function App() {
     photo:'',
     // error:'',
     // success:false
-  })
+  });
 
   if (firebase.apps.length===0) {
       firebase.initializeApp(firebaseConfig); 
@@ -33,7 +33,7 @@ function App() {
         email:email,
         photo:photoURL,
       }  
-      setUser(signInUser)
+      setUser(signInUser);
       console.log("sign in ",user.displayName);
       // ...
     }).catch((error) => {
@@ -51,7 +51,7 @@ function App() {
         error:'',
         success:false
       }
-      setUser(signOutUser)
+      setUser(signOutUser);
       console.clear()
       console.log("sign out");
     }).catch((error) => {
@@ -77,7 +77,7 @@ function App() {
     }if(isFieldValid){
       const newUserInfo={...user};
       newUserInfo[e.target.name]=e.target.value;
-      setUser(newUserInfo)
+      setUser(newUserInfo);
     }
   }
 
@@ -88,8 +88,9 @@ function App() {
       .then((res) => {
         const newUserInfo={...user};
         newUserInfo.error='';
-        newUserInfo.success=true
+        newUserInfo.success=true;
         setUser(newUserInfo)
+        updateUserName(user.name)
         // Signed in 
         console.log(res);
         // var user = res.user;
@@ -98,7 +99,7 @@ function App() {
       .catch((error) => {
         const newUserInfo={...user};
         newUserInfo.error=error.message;
-        newUserInfo.success=false
+        newUserInfo.success=false;
         setUser(newUserInfo);
         // var errorCode = error.code;
         // var errorMessage = error.message;
@@ -112,19 +113,33 @@ function App() {
         // Signed in
         const newUserInfo={...user};
         newUserInfo.error='';
-        newUserInfo.success=true
-        setUser(newUserInfo)
-        console.log(res);
+        newUserInfo.success=true;
+        setUser(newUserInfo);
+        console.log(res.user);
       })
       .catch((error) => {
         const newUserInfo={...user};
         newUserInfo.error=error.message;
-        newUserInfo.success=false
+        newUserInfo.success=false;
         setUser(newUserInfo);
       });
     }
     e.preventDefault();
     
+  }
+
+  const updateUserName=name=>{
+    const user = firebase.auth().currentUser;
+
+      user.updateProfile({
+        displayName: name
+      }).then(() => {
+        console.log("Update successful");
+        // ...
+      }).catch((error) => {
+        console.log(error);
+        // ...
+      });  
   }
   return (
     <div className="App">
@@ -147,7 +162,8 @@ function App() {
     <h1>Our Own Authentication</h1>
     {/* <p> {user.email}{user.password} </p> */}
     <input type="checkbox" onChange={()=>setNewUser(!newUser)} name="newUser" id="" />
-    <label htmlFor="newUser">New User Sign in</label>
+    <label htmlFor="newUser">New User {newUser ? 'Sign up' :'Sign in'}</label>
+    <h1>Name: {user.email} </h1>
     <form onSubmit={handleSubmit}>
       {newUser && <input type="text" name="name" id="" onBlur={handleChange} placeholder="Your name" />}
       <br />
@@ -155,7 +171,7 @@ function App() {
       <br />
       <input type="password" name="password" id="" onBlur={handleChange} placeholder="password" required/>
       <br />
-      <input type="submit" value="Submit" />
+      <input type="submit" value={newUser? 'Sign up': 'Sign in' } />
     </form>
     <p style={{color:'red'}}> {user.error} </p>
     {
