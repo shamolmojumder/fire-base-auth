@@ -7,6 +7,7 @@ import { useState } from 'react';
 function App() {
   const [user,setUser]= useState({
     isSignIn:false,
+    newUser:false,
     name:'',
     email:'',
     password:'',
@@ -127,8 +128,10 @@ function App() {
     }
     <h1>Our Own Authentication</h1>
     {/* <p> {user.email}{user.password} </p> */}
+    <input type="checkbox" onChange={toggle} name="newUser" id="" />
+    <label htmlFor="newUser">New User Sign in</label>
     <form onSubmit={handleSubmit}>
-      <input type="text" name="name" id="" onBlur={handleChange} placeholder="Your name" />
+      {user.newUser && <input type="text" name="name" id="" onBlur={handleChange} placeholder="Your name" />}
       <br />
       <input type="text" name="email" id="" onBlur={handleChange} placeholder="email" required/>
       <br />
