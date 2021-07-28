@@ -5,6 +5,7 @@ import firebaseConfig from './firebase.config';
 import { useState } from 'react';
 
 function App() {
+  const [newUser,setNewUser]=useState(false)
   const [user,setUser]= useState({
     isSignIn:false,
     newUser:false,
@@ -81,8 +82,8 @@ function App() {
   }
 
   const handleSubmit= (e)=>{
-    console.log(user.email , user.password);
-    if (user.email && user.password) {
+    // console.log(user.email , user.password);
+    if (newUser && user.email && user.password) {
       firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
       .then((res) => {
         const newUserInfo={...user};
@@ -103,6 +104,23 @@ function App() {
         // var errorMessage = error.message;
         // console.log(errorCode,errorMessage);
         // ..
+      });
+    }
+    if (!newUser && user.email && user.password) {
+      firebase.auth().signInWithEmailAndPassword(user.email, user.password)
+      .then((res) => {
+        // Signed in
+        const newUserInfo={...user};
+        newUserInfo.error='';
+        newUserInfo.success=true
+        setUser(newUserInfo)
+        console.log(res);
+      })
+      .catch((error) => {
+        const newUserInfo={...user};
+        newUserInfo.error=error.message;
+        newUserInfo.success=false
+        setUser(newUserInfo);
       });
     }
     e.preventDefault();
@@ -128,10 +146,10 @@ function App() {
     }
     <h1>Our Own Authentication</h1>
     {/* <p> {user.email}{user.password} </p> */}
-    <input type="checkbox" onChange={toggle} name="newUser" id="" />
+    <input type="checkbox" onChange={()=>setNewUser(!newUser)} name="newUser" id="" />
     <label htmlFor="newUser">New User Sign in</label>
     <form onSubmit={handleSubmit}>
-      {user.newUser && <input type="text" name="name" id="" onBlur={handleChange} placeholder="Your name" />}
+      {newUser && <input type="text" name="name" id="" onBlur={handleChange} placeholder="Your name" />}
       <br />
       <input type="text" name="email" id="" onBlur={handleChange} placeholder="email" required/>
       <br />
@@ -141,7 +159,7 @@ function App() {
     </form>
     <p style={{color:'red'}}> {user.error} </p>
     {
-      user.success && <p style={{color:'green'}}> User created successfully </p>
+      user.success && <p style={{color:'green'}}> User {newUser ? 'created' :'logged in'} successfully </p>
     }
     </div>
   );
