@@ -59,7 +59,7 @@ function App() {
     });
     
   }
-  const handleChange=(e)=>{
+  const handleBlur=(e)=>{
     //debugger;
     let isFieldValid =true;
     // console.log(e.target.name,e.target.value);
@@ -92,7 +92,7 @@ function App() {
         setUser(newUserInfo)
         updateUserName(user.name)
         // Signed in 
-        console.log(res);
+        console.log(res.user.name);
         // var user = res.user;
         // ...
       })
@@ -115,7 +115,7 @@ function App() {
         newUserInfo.error='';
         newUserInfo.success=true;
         setUser(newUserInfo);
-        console.log(res.user);
+        console.log(res.user.name);
       })
       .catch((error) => {
         const newUserInfo={...user};
@@ -165,11 +165,11 @@ function App() {
     <label htmlFor="newUser">New User {newUser ? 'Sign up' :'Sign in'}</label>
     <h1>Name: {user.email} </h1>
     <form onSubmit={handleSubmit}>
-      {newUser && <input type="text" name="name" id="" onBlur={handleChange} placeholder="Your name" />}
+      {newUser && <input type="text" name="name" id="" onBlur={handleBlur} placeholder="Your name" />}
       <br />
-      <input type="text" name="email" id="" onBlur={handleChange} placeholder="email" required/>
+      <input type="text" name="email" id="" onBlur={handleBlur} placeholder="email" required/>
       <br />
-      <input type="password" name="password" id="" onBlur={handleChange} placeholder="password" required/>
+      <input type="password" name="password" id="" onBlur={handleBlur} placeholder="password" required/>
       <br />
       <input type="submit" value={newUser? 'Sign up': 'Sign in' } />
     </form>
